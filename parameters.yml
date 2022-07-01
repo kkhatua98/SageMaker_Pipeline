@@ -1,0 +1,76 @@
+Resources:
+
+
+  MySNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "Approval for pipeline"
+      Subscription:
+        - Endpoint: "vrepaka@deloitte.com"
+          Protocol: "Email"
+        - Endpoint: "kkhatua@deloitte.com"
+          Protocol: "Email"
+      TopicName: "Approvals"
+
+  CodeCommit:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: CodeCommitMLRepository
+      Type: String
+      Value: mlwhizz-cf-sourcecode
+      #Description: ""
+  S3Bucketchurn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: ArtifactsBucketLocation
+      Type: String
+      Value: artifacts-churn
+      #Description: ""
+  S3Bucketmli:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MLInputBucket
+      Type: String
+      Value: mlinput-churn
+      #Description: ""
+  S3Bucketmlo:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: MLOutputBucket
+      Type: String
+      Value: mloutput-churn
+      #Description: ""
+  Filename:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: Filename
+      Type: String
+      Value: cloudfinal16.yml
+      #Description: ""
+  SNSTopic:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: SNSTopic
+      Type: String
+      Value: Approvals
+  UserArn:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: UserArn
+      Type: String
+      Value: arn:aws:iam::852619674999:user/vrepaka@deloitte.com
+      #Description: ""
+  VpcId:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: VpcId
+      Type: String
+      Value: vpc-67dd921f
+      #Description: ""
+  SubnetId:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: SubnetId
+      Type: StringList
+      Value: subnet-a2557789,subnet-bcba7ff6,subnet-e8eb41b5,subnet-eb28f093
+      #Description: ""
