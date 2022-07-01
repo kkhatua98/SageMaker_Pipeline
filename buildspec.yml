@@ -6,6 +6,7 @@ phases:
     runtime-versions:
       python: 3.7
     commands:
+      - pip install awscli==1.22.97
       - pip install boto3==1.21.42
       - pip install sagemaker==2.86.2 
       - pip install protobuf==3.20.0rc2
