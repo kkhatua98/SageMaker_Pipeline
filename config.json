@@ -77,7 +77,7 @@
     "scoring_preprocessing_instance_type":"ml.m5.xlarge",
     "scoring_preprocessing_instance_count":1,
     "scoring_preprocessing_code_location":"SageMaker_Pipeline_Component_Codes/Scoring/Scoring_Preprocessing.py",
-    "scoring_code_loaction":"SageMaker_Pipeline_Component_Codes/Scoring/inference.py",
+    "scoring_code_loaction":"SageMaker_Pipeline_Component_Codes/Scoring/endpoint_inference.py",
     "endpoint_updater_code_location":"SageMaker_Pipeline_Component_Codes/Pipeline_Builder/update_endpoint.py",
     "endpoint_name":"churn-inference-endpoint"
 }
