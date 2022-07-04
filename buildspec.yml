@@ -18,9 +18,7 @@ phases:
       - cp Pipeline_Builder/Helper_Functions/ipynb_to_py.py .
       - python code_uploader.py
       - python ipynb_to_py.py --input_file Pipeline_Builder/Training_Pipeline_Builder.ipynb --output_file Training_Pipeline_Builder.py
-      - python ipynb_to_py.py --input_file Pipeline_Builder/Scoring_Pipeline_Builder.ipynb --output_file Scoring_Pipeline_Builder.py 
-      - python Training_Pipeline_Builder.py
-      - python Scoring_Pipeline_Builder.py
+      - python Training_Pipeline_Builder.py   
 artifacts:
   files:
     - '**/*'
