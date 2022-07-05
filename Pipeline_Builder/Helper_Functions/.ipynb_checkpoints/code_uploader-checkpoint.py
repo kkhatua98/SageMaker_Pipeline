@@ -49,13 +49,22 @@ functions = [func["FunctionName"] for func in response["Functions"]]
 if lambda_function_name not in functions:
     response = client.create_function(
         Code={
-            'S3Bucket': build_parameters["input_bucket"],
-            'S3Key': '/codes/lambda_codes.zip',
+            'S3Bucket':build_parameters["input_bucket"],
+            'S3Key':'/codes/lambda_codes.zip',
         },
         Description='Update churn scoring endpoint',
         FunctionName=build_parameters["lambda_function_name"],
         Handler='update_endpoint.handler_name',
         Publish=True,
-        Role='arn:aws:iam::123456789012:role/lambda-role',
+        # Role='arn:aws:iam::123456789012:role/lambda-role',
+        Role="arn:aws:iam::852619674999:role/role_given_to_lambda",
         Runtime='python3.7'
     )
+    print(response)
+else:
+    response = client.update_function_code(
+        FunctionName=build_parameters["lambda_function_name"],
+        S3Bucket=build_parameters["input_bucket"],
+        S3Key='/codes/lambda_codes.zip'
+    )
+    print(response)
