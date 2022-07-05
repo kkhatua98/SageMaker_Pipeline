@@ -65,6 +65,6 @@ else:
     response = client.update_function_code(
         FunctionName=build_parameters["lambda_function_name"],
         S3Bucket=build_parameters["input_bucket"],
-        S3Key='/codes/lambda_codes.zip'
+        S3Key='codes/lambda_codes.zip'
     )
     print(response)
