@@ -50,7 +50,7 @@ if lambda_function_name not in functions:
     response = client.create_function(
         Code={
             'S3Bucket':build_parameters["input_bucket"],
-            'S3Key':'/codes/lambda_codes.zip',
+            'S3Key':'codes/lambda_codes.zip',
         },
         Description='Update churn scoring endpoint',
         FunctionName=build_parameters["lambda_function_name"],
