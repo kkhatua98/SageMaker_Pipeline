@@ -78,5 +78,8 @@
     "scoring_preprocessing_instance_count":1,
     "scoring_preprocessing_code_location":"SageMaker_Pipeline_Component_Codes/Scoring/Scoring_Preprocessing.py",
     "scoring_code_location":"SageMaker_Pipeline_Component_Codes/Scoring/inference.py",
-    "endpoint_name":"churn-inference-endpoint"
+    "endpoint_name":"churn-inference-endpoint",
+    "endpoint_scoring_code_location":"SageMaker_Pipeline_Component_Codes/Scoring/endpoint/endpoint_inference.py",
+    "lambda_code_location":"endpoint_lambda/update_endpoint.py",
+    "lambda_function_name":"churn_scoring_endpoint_updater"
 }
