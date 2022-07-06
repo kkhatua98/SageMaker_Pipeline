@@ -94,6 +94,7 @@ def dt_training_function():
         ## Getting feature importance value
         feat_importance = mod_dt.tree_.compute_feature_importances(normalize=False).tolist()
         print(feat_importance)
+        print(X_train.columns.tolist())
         print(len(feat_importance))
         print(len(X_train.columns.tolist()))
         feat_importance_record = pandas.DataFrame(feat_importance, columns = X_train.columns.tolist())

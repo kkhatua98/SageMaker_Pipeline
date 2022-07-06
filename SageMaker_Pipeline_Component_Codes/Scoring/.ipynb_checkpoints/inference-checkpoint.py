@@ -18,9 +18,13 @@ def model_fn(model_dir):
     
     print("Files are")
     dir_list = os.listdir("/opt/ml/model")
+    for content in dir_list:
+        if "joblib" in content:
+            file_name = content
     print(dir_list)
     
-    preprocessor = joblib.load(os.path.join(model_dir, dir_list[0]))
+    # preprocessor = joblib.load(os.path.join(model_dir, dir_list[0]))
+    preprocessor = joblib.load(os.path.join(model_dir, file_name))
     return preprocessor
 
 

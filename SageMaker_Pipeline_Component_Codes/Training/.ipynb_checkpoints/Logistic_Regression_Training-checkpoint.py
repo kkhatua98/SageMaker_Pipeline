@@ -114,6 +114,7 @@ def lr_training_function():
         ## Getting feature importance value
         feat_importance = mod_lr.coef_.tolist()[0]
         print(feat_importance)
+        print(X_train.columns.tolist())
         print(len(feat_importance))
         print(len(X_train.columns.tolist()))
         feat_importance_record = pandas.DataFrame(feat_importance, columns = X_train.columns.tolist())
