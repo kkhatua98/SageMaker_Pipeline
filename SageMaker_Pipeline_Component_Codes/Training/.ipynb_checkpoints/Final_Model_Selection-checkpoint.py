@@ -14,7 +14,7 @@ def preprocessing_function():
     import subprocess
     import sys
     
-    subprocess.run(["pip", "install", "-r", "/opt/ml/processing/input/code/preprocessing_requirements.txt"])
+    subprocess.run(["pip", "install", "-r", "/opt/ml/processing/input/requirements/preprocessing_requirements.txt"])
     # subprocess.check_call([sys.executable, "-m", "pip", "install", "fsspec"])
 
 
@@ -38,6 +38,7 @@ def preprocessing_function():
     parser.add_argument('--objective_metric', type=str, default="accuracy")
     parser.add_argument('--property_file_location', type = str, default = "/opt/ml/processing/evaluation")
     parser.add_argument("--feature_importance_output_file_location", type = str, default = "/opt/ml/processing/feature_importance")
+    parser.add_argument("--feature_importance_input_file_location", type = str)
     
     
         
