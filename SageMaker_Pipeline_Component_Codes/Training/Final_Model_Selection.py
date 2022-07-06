@@ -108,7 +108,9 @@ def preprocessing_function():
         try:
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
-            model_performance_metrics = pd.read_csv(model_metric_input_location)
+            metric_bucket = model_metric_input_location[5:].split('/')[0]
+            s3.download_file(metric_bucket, model_metric_input_location[len(metric_bucket)+6:], model_metric_input_location.split('/')[-1])
+            model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
         except:
             model_performance_metrics = pd.DataFrame([], columns = ["Date", "Metric", "Metric Value"])
@@ -125,7 +127,9 @@ def preprocessing_function():
         try:
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
-            feature_importance_records = pd.read_csv(feature_importance_input_file_location)
+            feature_bucket = feature_importance_input_file_location[5:].split('/')[0]
+            s3.download_file(feature_bucket, feature_importance_input_file_location[len(feature_bucket)+6:], feature_importance_input_file_location.split('/')[-1])
+            model_performance_metrics = pd.read_csv(feature_importance_input_file_location.split('/')[-1])
         except:
             feature_importance_records = pd.DataFrame([], columns = feature_importance_column_names)
         

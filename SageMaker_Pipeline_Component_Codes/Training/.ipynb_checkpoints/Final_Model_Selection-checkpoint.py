@@ -108,7 +108,9 @@ def preprocessing_function():
         try:
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
-            model_performance_metrics = pd.read_csv(model_metric_input_location)
+            metric_bucket = model_metric_input_location[5:].split('/')[0]
+            s3.download_file(metric_bucket, model_metric_input_location[len(metric_bucket)+6:], model_metric_input_location.split('/')[-1])
+            model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
         except:
             model_performance_metrics = pd.DataFrame([], columns = ["Date", "Metric", "Metric Value"])
