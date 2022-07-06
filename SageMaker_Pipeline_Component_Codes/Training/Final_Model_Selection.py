@@ -36,6 +36,7 @@ def preprocessing_function():
     parser.add_argument('--input_folder', type=str, default="/opt/ml/processing/input")
     parser.add_argument('--objective_metric', type=str, default="accuracy")
     parser.add_argument('--property_file_location', type = str, default = "/opt/ml/processing/evaluation")
+    parser.add_argument("--feature_importance_output_file_location", type = str, default = "/opt/ml/processing/feature_importance")
     
     
         
@@ -47,6 +48,8 @@ def preprocessing_function():
     input_folder = args.input_folder
     objective_metric = args.objective_metric
     property_file_location = args.property_file_location
+    feature_importance_output_file_location = args.feature_importance_output_file_location
+    feature_importance_input_file_location = args.feature_importance_input_file_location
     
     
     logging.captureWarnings(True)
@@ -93,6 +96,11 @@ def preprocessing_function():
         # shutil.copyfile(original, target)
         s3 = boto3.client ('s3')
         s3.download_file(model_data_bucket, model_data_location[len(model_data_bucket)+6:], f"{final_model_location}/{model_data_location.split('/')[-1]}")
+        s3.download_file(model_data_bucket, model_data_location[len(model_data_bucket)+6:-len(model_data_location.split('/')[-1])]+"output.tar.gz", f"output.tar.gz")
+        subprocess.run(["tar", "-xvf", "output.tar.gz"])
+        feature_importance = pd.read_csv("Feature_Importance.csv")
+        feature_importance_values = feature_importance.iloc[0].tolist()
+        feature_importance_column_names = feature_importance.columns.tolist()
         
         
         try:
@@ -106,6 +114,24 @@ def preprocessing_function():
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
         model_performance_metrics = model_performance_metrics.append({"Date":today, "Metric":objective_metric, "Metric Value":max_metric}, ignore_index = True)
+        
+        # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
+        model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)
+        
+        
+        try:
+            # metric_folder_contents = os.listdir(model_metric_input_location)
+            # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
+            feature_importance_records = pd.read_csv(feature_importance_input_file_location)
+        except:
+            feature_importance_records = pd.DataFrame([], columns = feature_importance_column_names)
+        
+        len_records = len(feature_importance_records)
+        today = date.today()
+        # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
+        feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
+        
+        feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
         # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
         model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)

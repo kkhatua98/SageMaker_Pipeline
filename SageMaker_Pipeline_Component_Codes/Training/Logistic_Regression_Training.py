@@ -109,6 +109,12 @@ def lr_training_function():
         logger.info("Predictions written to disk.")
         
         
+        ## Getting feature importance value
+        feat_importance = mod_lr.coef_.tolist()[0]
+        feat_importance_record = pandas.DataFrame(feat_importance, columns = X_train.columns.tolist())
+        feat_importance_record.to_csv(f"{args.output_data_dir}/Feature_Importance.csv", index = False)
+        
+        
         objective_metric = args.objective_metric
         if objective_metric == "anything":
             objective_metric = "accuracy"

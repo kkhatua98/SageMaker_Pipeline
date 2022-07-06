@@ -34,6 +34,7 @@ def input_fn(request_body, request_content_type):
     import pandas
     from io import StringIO
     df = pandas.read_csv(StringIO(request_body))
+    print(df.head())
     return df
 #     if request_content_type == "text/csv":
 #         df = pandas.read_csv(StringIO(request_body))

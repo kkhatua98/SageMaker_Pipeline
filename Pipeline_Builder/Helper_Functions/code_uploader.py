@@ -20,6 +20,7 @@ subprocess.run(["cp", f"SageMaker_Pipeline_Component_Codes/Training/{build_param
 subprocess.run(["tar", "-czvf", "evaluation.tar.gz", "-C", "tmp_targz", f"{build_parameters['single_model_evluation_entry_point']}"])
 subprocess.run(["aws", "s3", "cp", f"evaluation.tar.gz", f"s3://{build_parameters['input_bucket']}/codes/"])
 subprocess.run(["aws", "s3", "cp", f"SageMaker_Pipeline_Component_Codes/Training/{build_parameters['processing_code_file_name']}", f"s3://{build_parameters['input_bucket']}/codes/"])
+subprocess.run(["aws", "s3", "cp", f"Requirements/preprocessing_requirements.txt", f"s3://{build_parameters['input_bucket']}/codes/"])
 subprocess.run(["aws", "s3", "cp", f"SageMaker_Pipeline_Component_Codes/Training/{build_parameters['get_best_model_code_file_name']}", f"s3://{build_parameters['input_bucket']}/codes/"])
 subprocess.run(["aws", "s3", "cp", f"{build_parameters['scoring_preprocessing_code_location']}", f"s3://{build_parameters['input_bucket']}/codes/"])
 

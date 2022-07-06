@@ -87,8 +87,15 @@ def dt_training_function():
 
         ## Getting predictions and calculating accuracy.
         prediction=mod_dt.predict(X_test)
-        pandas.DataFrame(prediction, columns = ["Predictions"]).to_csv(f"{args.output_data_dir}/Prediction.csv")
+        pandas.DataFrame(prediction, columns = ["Predictions"]).to_csv(f"{args.output_data_dir}/Prediction.csv", index = False)
         logger.info("Predictions written to disk.")
+        
+        
+        ## Getting feature importance value
+        feat_importance = mod_dt.tree_.compute_feature_importances(normalize=False)
+        feat_importance_record = pandas.DataFrame(feat_importance.tolist(), columns = X_train.columns.tolist())
+        feat_importance_record.to_csv(f"{args.output_data_dir}/Feature_Importance.csv", index = False)
+        
 
         objective_metric = args.objective_metric
         if objective_metric == "anything":
