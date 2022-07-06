@@ -109,6 +109,7 @@ def preprocessing_function():
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
             model_performance_metrics = pd.read_csv(model_metric_input_location)
+            print(f"Model performance metric is {model_performance_metrics}")
         except:
             model_performance_metrics = pd.DataFrame([], columns = ["Date", "Metric", "Metric Value"])
         
