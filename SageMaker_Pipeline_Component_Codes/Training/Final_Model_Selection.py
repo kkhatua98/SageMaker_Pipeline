@@ -129,7 +129,8 @@ def preprocessing_function():
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
             feature_bucket = feature_importance_input_file_location[5:].split('/')[0]
             s3.download_file(feature_bucket, feature_importance_input_file_location[len(feature_bucket)+6:], feature_importance_input_file_location.split('/')[-1])
-            model_performance_metrics = pd.read_csv(feature_importance_input_file_location.split('/')[-1])
+            feature_importance_records = pd.read_csv(feature_importance_input_file_location.split('/')[-1])
+            print(f"Contents of feature importance file are {feature_importance_records}")
         except:
             feature_importance_records = pd.DataFrame([], columns = feature_importance_column_names)
         
