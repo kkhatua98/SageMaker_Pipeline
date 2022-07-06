@@ -14,7 +14,8 @@ def preprocessing_function():
     import subprocess
     import sys
     
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "fsspec"])
+    subprocess.run(["pip", "install", "-r", "/opt/ml/processing/input/code/preprocessing_requirements.txt"])
+    # subprocess.check_call([sys.executable, "-m", "pip", "install", "fsspec"])
 
 
     

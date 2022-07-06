@@ -14,7 +14,8 @@ def preprocessing_function():
     import subprocess
     import sys
     
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "fsspec"])
+    subprocess.run(["pip", "install", "-r", "/opt/ml/processing/input/code/preprocessing_requirements.txt"])
+    # subprocess.check_call([sys.executable, "-m", "pip", "install", "fsspec"])
 
 
     
@@ -49,6 +50,7 @@ def preprocessing_function():
     objective_metric = args.objective_metric
     property_file_location = args.property_file_location
     feature_importance_output_file_location = args.feature_importance_output_file_location
+    feature_importance_input_file_location = args.feature_importance_input_file_location
     
     
     logging.captureWarnings(True)
@@ -121,7 +123,7 @@ def preprocessing_function():
         try:
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
-            feature_importance_records = pd.read_csv(model_metric_input_location)
+            feature_importance_records = pd.read_csv(feature_importance_input_file_location)
         except:
             feature_importance_records = pd.DataFrame([], columns = feature_importance_column_names)
         
