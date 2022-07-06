@@ -2,6 +2,8 @@
 
 def preprocessing_function():
     import os
+    import sys
+    import traceback
     import logging
     import argparse
     import numpy as np
@@ -57,7 +59,8 @@ def preprocessing_function():
         #################
 
         whole_data['Area code'] = whole_data['Area code'].astype('object')
-        logger.info("Data types corrected.")
+        # logger.info("Data types corrected.")
+        print("Data types corrected.")
 
         ############## --  ################
 
@@ -160,7 +163,8 @@ def preprocessing_function():
         whole_data['No_plans'].replace(True, 1, inplace=True)
         whole_data['No_plans'].replace(False, 1, inplace=True)
 
-        logger.info("New features created.")
+        # logger.info("New features created.")
+        print("New features created.")
 
         ############## --  ################
 
@@ -192,7 +196,8 @@ def preprocessing_function():
 
         whole_data = whole_data.drop(columns= redundant_cols + feats_eng + feats_still_to_eng + leakage_feats + target + rejected_columns)
 
-        logger.info("Dropped some features.")
+        # logger.info("Dropped some features.")
+        print("Dropped some features.")
 
         ############## --  ################
 
@@ -215,7 +220,8 @@ def preprocessing_function():
         ## Creating dummy variables (One-Hot Encoding)
         whole_data = pd.get_dummies(whole_data, columns = categorical_feats, drop_first = True)
 
-        logger.info("Scaling and One-Hot Encoding done.")
+        # logger.info("Scaling and One-Hot Encoding done.")
+        print("Scaling and One-Hot Encoding done.")
 
         ############## --  ################
 
@@ -224,10 +230,13 @@ def preprocessing_function():
 
         ## Writing data into specific location.
         pd.DataFrame(whole_data).to_csv(f"{preprocessed_batch_data_location}/Processed.csv", index=False)
-        logger.info("Data written to disk inside container.")
+        # logger.info("Data written to disk inside container.")
+        print("Data written to disk inside container.")
 
 
-        logger.info("Preprocessing completed.")
+        # logger.info("Preprocessing completed.")
+        print("Preprocessing completed.")
+        
         
         logger.removeHandler(handler)
         handler.close()
