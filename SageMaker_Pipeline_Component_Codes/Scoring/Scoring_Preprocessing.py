@@ -228,7 +228,7 @@ def preprocessing_function():
 
 
     ## Writing data into specific location.
-    pd.DataFrame(whole_data).to_csv(f"{preprocessed_batch_data_location}/Processed.csv", index=False)
+    pd.DataFrame(whole_data).to_csv(f"{preprocessed_batch_data_location}/train.csv", index=False)
     # logger.info("Data written to disk inside container.")
     print("Data written to disk inside container.")
 
