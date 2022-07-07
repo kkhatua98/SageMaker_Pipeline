@@ -50,7 +50,7 @@ def handler_name(event, context):
                                     sagemaker_session = sagemaker_session,
                                     
                                     env = {"target_column":build_parameters["target_column"],
-                                           "feature_selection_file_location":f"s3://{build_parameters["input_bucket"]}/Feature_Selection.csv",
+                                           "feature_selection_file_location":f"s3://{build_parameters['input_bucket']}/Feature_Selection.csv",
                                            "log_location":"/opt/ml/processing/logss"
                                           }
                                    )
