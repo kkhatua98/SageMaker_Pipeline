@@ -1,5 +1,7 @@
 ##
 def handler_name(event, context):
+    import subprocess
+    subprocess.run(["pip", "install", "boto3", "sagemaker"])
     ## Setting the session
     import boto3
     import sagemaker
