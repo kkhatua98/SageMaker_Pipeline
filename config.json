@@ -1,5 +1,8 @@
 {
     "usecase":"churn",
+    "model_given":"No",
+    "given_model_type":"sklearn",
+    "given_model_path":"s3://inputbucket",
     "sklearn_processor_framework_version":"0.23-1",
     "input_bucket":"mlinput-churn-telecomchurn-852619674999-ap-south-1",
     "output_bucket":"mloutput-churn-telecomchurn-852619674999-ap-south-1",
