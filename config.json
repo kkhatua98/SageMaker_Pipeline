@@ -72,7 +72,7 @@
     "model_package_group_name":"churn-packagegroup",
     "scoring_data_file_name":"churn-bigml-20.csv",
     "scoring_data_s3_location":"s3://churn-input-bucket-us-east-1/churn-bigml-20.csv",
-    "scoring_instance_type":"ml.m5.xlarge",
+    "scoring_instance_type":"ml.m5.large",
     "scoring_data":"s3://demo-bucket-test-mlop/Churn_Demo/churn-bigml-20.csv",
     "scoring_preprocessing_instance_type":"ml.m5.xlarge",
     "scoring_preprocessing_instance_count":1,
