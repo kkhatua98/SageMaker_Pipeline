@@ -27,4 +27,4 @@ for content in dir_list:
 preprocessor = joblib.load(f"{file_name}")
 
 predictions = preprocessor.predict(scoring_data)
-predictions.to_csv("/opt/ml/processing/train/Predictions.csv")
+pd.DataFrame(predictions, columns=["Prediction"]).to_csv("/opt/ml/processing/train/Predictions.csv", index = False)
