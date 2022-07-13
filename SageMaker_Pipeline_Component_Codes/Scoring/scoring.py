@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 import subprocess
-from sklearn.externals import joblib
+import joblib
 
 data_folder = "/opt/ml/processing/input/data"
 model_folder = "/opt/ml/processing/input/model_folder"
