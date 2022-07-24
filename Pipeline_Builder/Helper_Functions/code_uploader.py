@@ -73,3 +73,8 @@ else:
         S3Key='codes/lambda_codes.zip'
     )
     print(response)
+
+
+
+## Uploading model monitoring codes to s3.  
+subprocess.run(["aws", "s3", "cp", f"SageMaker_Pipeline_Component_Codes/Monitoring/{build_parameters['monitoring_code_file_name']}", f"s3://{build_parameters['input_bucket']}/codes/"])

@@ -36,6 +36,10 @@ subprocess.run(["cp", f"{build_parameters['lambda_code_location']}", "."])
 subprocess.run(["zip", '-r', "lambda_codes.zip", f"{build_parameters['lambda_code_location'].split('/')[-1]}", "config.json"])
 subprocess.run(["aws", "s3", "cp", "lambda_codes.zip", f"s3://{build_parameters['input_bucket']}/codes/"])
 
+
+subprocess.run(["cp", "SageMaker_Pipeline_Component_Codes/Scoring/scoring.py", '.'])
+subprocess.run(["aws", "s3", "cp", "scoring.py", f"s3://{build_parameters['input_bucket']}/codes/"])
+
 from sagemaker import get_execution_role
 
 role = get_execution_role()
@@ -69,3 +73,8 @@ else:
         S3Key='codes/lambda_codes.zip'
     )
     print(response)
+
+
+
+## Uploading model monitoring codes to s3.  
+subprocess.run(["aws", "s3", "cp", f"SageMaker_Pipeline_Component_Codes/Monitoring/{build_parameters['monitoring_code_file_name']}", f"s3://{build_parameters['input_bucket']}/codes/"])
