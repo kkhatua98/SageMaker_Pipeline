@@ -7,6 +7,7 @@ def monitoring_function():
     from sklearn.metrics import recall_score,roc_auc_score
     from sklearn.metrics import f1_score
     from sklearn.metrics import roc_curve
+    import glob
 
     import argparse
     parser = argparse.ArgumentParser()
@@ -15,8 +16,8 @@ def monitoring_function():
     parser.add_argument("--metrics_output_location", type = str)
     args, _ = parser.parse_known_args()
 
-    y_actual = pd.read_csv(f"{args.y_actual_location}").loc[:, "Prediction"]
-    y_predicted = pd.read_csv(f"{args.y_predicted_location}")
+    y_actual = pd.read_csv(glob.glob(f"{args.y_actual_location}/*.csv")[0]).loc[:, "Churn"]
+    y_predicted = pd.read_csv(glob.glob(f"{args.y_predicted_location}/*.csv")).loc[:, "Prediction"]
 
     tn, fp, fn, tp = confusion_matrix(y_actual,y_predicted).ravel()
     accuracy = round(100*accuracy_score(y_actual,y_predicted),2)
