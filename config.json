@@ -84,5 +84,6 @@
     "endpoint_name":"churn-inference-endpoint",
     "endpoint_scoring_code_location":"SageMaker_Pipeline_Component_Codes/Scoring/endpoint/endpoint_inference.py",
     "lambda_code_location":"endpoint_lambda/update_endpoint.py",
-    "lambda_function_name":"churn_scoring_endpoint_updater"
+    "lambda_function_name":"churn_scoring_endpoint_updater",
+    "monitoring_code_file_name":"Monitoring.py"
 }
