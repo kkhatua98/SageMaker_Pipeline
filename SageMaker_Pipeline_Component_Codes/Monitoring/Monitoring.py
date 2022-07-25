@@ -38,7 +38,7 @@ def monitoring_function():
     # roc_auc = roc_auc_score(y_actual, y_pred_proba)
 
     try:
-        metrics_df = pd.read_csv(f"{args.metrics_input_location}/Monitor.csv")
+        metrics_df = pd.read_csv(f"{args.metrics_input_location}")
     except:
         metrics_df = pd.DataFrame([], columns = ["tn", "fp", "fn", "tp", "accuracy", "precision", "recall", "specificity", "f1"])
 
