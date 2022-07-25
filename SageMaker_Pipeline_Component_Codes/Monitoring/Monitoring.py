@@ -19,6 +19,7 @@ def monitoring_function():
     parser = argparse.ArgumentParser()
     parser.add_argument('--y_actual_location', type=str)
     parser.add_argument('--y_predicted_location', type=str)
+    parser.add_argument("--metrics_input_location", type = str)
     parser.add_argument("--metrics_output_location", type = str)
     args, _ = parser.parse_known_args()
 
@@ -37,7 +38,7 @@ def monitoring_function():
     # roc_auc = roc_auc_score(y_actual, y_pred_proba)
 
     try:
-        metrics_df = pd.read_csv(f"{args.metrics_output_location}/Monitor.csv")
+        metrics_df = pd.read_csv(f"{args.metrics_input_location}/Monitor.csv")
     except:
         metrics_df = pd.DataFrame([], columns = ["tn", "fp", "fn", "tp", "accuracy", "precision", "recall", "specificity", "f1"])
 
