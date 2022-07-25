@@ -11,7 +11,6 @@ phases:
       - pip install sagemaker==2.86.2 
       - pip install protobuf==3.20.0rc2
       - pip install json5==0.9.6
-      - pipe install s3fs==2022.5.0
   build:
     commands:
       - mkdir tmp_targz
