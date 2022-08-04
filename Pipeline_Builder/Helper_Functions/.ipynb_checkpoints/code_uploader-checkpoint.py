@@ -81,7 +81,7 @@ else:
 subprocess.run(["cp", "Lambda_Functions/monitoring.py", "."])
 subprocess.run(["zip", '-r', "monitoring_lambda_codes.zip", "monitoring.py"])
 subprocess.run(["aws", "s3", "cp", "monitoring_lambda_codes.zip", f"s3://{build_parameters['input_bucket']}/codes/Lambda/"])
-monitoring_lambda_function_name = "monitoring_function"
+monitoring_lambda_function_name = "model_performance_notification"
 if monitoring_lambda_function_name not in functions:
     response = client.create_function(
         Code={
@@ -89,7 +89,7 @@ if monitoring_lambda_function_name not in functions:
             'S3Key':'codes/Lambda/monitoring_lambda_codes.zip',
         },
         Description='Update churn scoring endpoint',
-        FunctionName="monitoring_notification",
+        FunctionName="model_performance_notification",
         Handler='update_endpoint.handler_name',
         Publish=True,
         # Role='arn:aws:iam::123456789012:role/lambda-role',
@@ -99,7 +99,7 @@ if monitoring_lambda_function_name not in functions:
     print(response)
 else:
     response = client.update_function_code(
-        FunctionName="monitoring_notification",
+        FunctionName="model_performance_notification",
         S3Bucket=build_parameters["input_bucket"],
         S3Key='codes/Lambda/monitoring_lambda_codes.zip'
     )

@@ -81,7 +81,7 @@ else:
 subprocess.run(["cp", "Lambda_Functions/monitoring.py", "."])
 subprocess.run(["zip", '-r', "monitoring_lambda_codes.zip", "monitoring.py"])
 subprocess.run(["aws", "s3", "cp", "monitoring_lambda_codes.zip", f"s3://{build_parameters['input_bucket']}/codes/Lambda/"])
-monitoring_lambda_function_name = "monitoring_function"
+monitoring_lambda_function_name = "model_performance_notification"
 if monitoring_lambda_function_name not in functions:
     response = client.create_function(
         Code={
