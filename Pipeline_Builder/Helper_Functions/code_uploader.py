@@ -89,7 +89,7 @@ if monitoring_lambda_function_name not in functions:
             'S3Key':'codes/Lambda/monitoring_lambda_codes.zip',
         },
         Description='Update churn scoring endpoint',
-        FunctionName="monitoring_notification",
+        FunctionName="model_performance_notification",
         Handler='update_endpoint.handler_name',
         Publish=True,
         # Role='arn:aws:iam::123456789012:role/lambda-role',
@@ -99,7 +99,7 @@ if monitoring_lambda_function_name not in functions:
     print(response)
 else:
     response = client.update_function_code(
-        FunctionName="monitoring_notification",
+        FunctionName="model_performance_notification",
         S3Bucket=build_parameters["input_bucket"],
         S3Key='codes/Lambda/monitoring_lambda_codes.zip'
     )

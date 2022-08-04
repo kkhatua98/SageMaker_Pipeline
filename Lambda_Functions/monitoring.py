@@ -8,7 +8,7 @@ def lambda_handler(event, context):
 
     # The name of the model created in the Pipeline CreateModelStep
     performance_file_location = event["performance_file_location"]
-    sns_topic_name = event["sns_topic_name"]
+    sns_topic_arn = event["sns_topic_name"]
     
     
     s3_client = boto3.client('s3')
@@ -27,7 +27,7 @@ def lambda_handler(event, context):
     import datetime
     snsClient = boto3.client("sns")
     response = snsClient.publish(
-        TopicArn = "arn:aws:sns:us-east-1:852619674999:mail_from_lambda", 
+        TopicArn = sns_topic_arn, 
         # Message = json.dumps(message_sns),
         Message = mail_content,
         Subject = f"Model Performance Metrics for {str(datetime.datetime.today()).split(' ')[0]}"
