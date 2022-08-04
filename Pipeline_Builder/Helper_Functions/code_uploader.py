@@ -75,6 +75,37 @@ else:
     print(response)
 
 
+    
+#### Notifying Monitoring outputs through Lambda functions
+## Creating the zip file
+subprocess.run(["cp", "Lambda_Functions/monitoring.py", "."])
+subprocess.run(["zip", '-r', "monitoring_lambda_codes.zip", "monitoring.py"])
+subprocess.run(["aws", "s3", "cp", "monitoring_lambda_codes.zip", f"s3://{build_parameters['input_bucket']}/codes/Lambda/"])
+monitoring_lambda_function_name = "monitoring_function"
+if monitoring_lambda_function_name not in functions:
+    response = client.create_function(
+        Code={
+            'S3Bucket':build_parameters["input_bucket"],
+            'S3Key':'codes/Lambda/monitoring_lambda_codes.zip',
+        },
+        Description='Update churn scoring endpoint',
+        FunctionName="monitoring_notification",
+        Handler='update_endpoint.handler_name',
+        Publish=True,
+        # Role='arn:aws:iam::123456789012:role/lambda-role',
+        Role="arn:aws:iam::852619674999:role/role_given_to_lambda",
+        Runtime='python3.7'
+    )
+    print(response)
+else:
+    response = client.update_function_code(
+        FunctionName="monitoring_notification",
+        S3Bucket=build_parameters["input_bucket"],
+        S3Key='codes/Lambda/monitoring_lambda_codes.zip'
+    )
+    print(response)
+
+
 
 ## Uploading model monitoring codes to s3.  
 subprocess.run(["aws", "s3", "cp", f"SageMaker_Pipeline_Component_Codes/Monitoring/{build_parameters['monitoring_code_file_name']}", f"s3://{build_parameters['input_bucket']}/codes/"])
