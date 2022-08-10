@@ -140,6 +140,15 @@ def lr_training_function():
         logger.info(f"{objective_metric} calculated.")
         
         
+        ## Writing varius model performance metrics
+        from datetime import date
+        today = date.today()
+        metrices = ["F1","Recall","Accuracy","Precision"]
+        train_prediction = mod_dt.predict(X_train)
+        metrics = pandas.DataFrame([[today] * len(metrices), ["Train"] * len(metrices) + ["Test"] * len(metrices), metrices * 2, [f1_score(y_train, train_prediction), recall_score(y_train, train_prediction), accuracy_score(y_train, train_prediction), precision_score(y_train, train_prediction)] + [f1_score(y_test, prediction), recall_score(y_test, prediction), accuracy_score(y_test, prediction), precision_score(y_test, prediction)]], columns = ["Training_Date","Dataset","Metric", "Value"])
+        metrics.to_csv(f"{args.output_data_dir}/Metrics.csv", index = False)
+        
+        
         ## Closing the logger.
         logger.removeHandler(handler)
         handler.close()

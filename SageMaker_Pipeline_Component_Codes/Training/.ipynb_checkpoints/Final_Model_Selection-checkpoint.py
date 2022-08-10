@@ -104,6 +104,12 @@ def preprocessing_function():
         feature_importance_values = feature_importance.iloc[0].tolist()
         feature_importance_column_names = feature_importance.columns.tolist()
         
+        pmp_best = pd.read_csv("Metrics.csv")
+        dates = pmp_best["Training_Date"].tolist()
+        data_sets = pmp_best["Dataset"].tolist()
+        metrics = pmp_best["Metric"].tolist()
+        values = pmp_best["Value"].tolist()
+        
         
         try:
             # metric_folder_contents = os.listdir(model_metric_input_location)
@@ -113,12 +119,14 @@ def preprocessing_function():
             model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
         except:
-            model_performance_metrics = pd.DataFrame([], columns = ["Date", "Metric", "Metric Value"])
+            model_performance_metrics = pd.DataFrame([], columns = ["Training_Date","Dataset","Metric", "Value"])
         
         len_metrics = len(model_performance_metrics)
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
-        model_performance_metrics = model_performance_metrics.append({"Date":today, "Metric":objective_metric, "Metric Value":max_metric}, ignore_index = True)
+#         model_performance_metrics = model_performance_metrics.append({"Date":today, "Metric":objective_metric, "Metric Value":max_metric}, ignore_index = True)
+        for i in range(len(dates)):
+            model_performance_metrics = model_performance_metrics.append({"Training_Date":dates[i], "Dataset":data_sets[i], "Metric":metrics[i], "Value":values[i]}, ignore_index = True)
         
         # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
         model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)
@@ -132,12 +140,14 @@ def preprocessing_function():
             feature_importance_records = pd.read_csv(feature_importance_input_file_location.split('/')[-1])
             print(f"Contents of feature importance file are {feature_importance_records}")
         except:
-            feature_importance_records = pd.DataFrame([], columns = feature_importance_column_names)
+            feature_importance_records = pd.DataFrame([], columns = ["Training_Date", "Dataset", "Variable_Name", "Importance_Value"])
         
         len_records = len(feature_importance_records)
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
-        feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
+        # feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
+        for i in range(len(feature_importance_column_names)):
+            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":Training, "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
         
         feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
