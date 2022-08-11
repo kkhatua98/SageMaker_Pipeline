@@ -119,20 +119,20 @@ def preprocessing_function():
             model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
         except:
-            model_performance_metrics = pd.DataFrame([], columns = ["Training_Date","Dataset","Metric", "Value"])
+            model_performance_metrics = pd.DataFrame([], columns = ["Performance_Training_Date","Dataset","Metric", "Value"])
         
         len_metrics = len(model_performance_metrics)
         increase_decrease = [0] * len(values)
         if len_metrics > 0:
             last_training_date = model_performance_metrics.iloc[-1,0]
-            subset = model_performance_metrics.loc[model_performance_metrics["Training_Date"] == last_training_date, :]
+            subset = model_performance_metrics.loc[model_performance_metrics["Performance_Training_Date"] == last_training_date, :]
             old_values = subset["Value"].tolist()
             increase_decrease = [(values[i] - old_values[i])/old_values for i in range(len(values))]
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
 #         model_performance_metrics = model_performance_metrics.append({"Date":today, "Metric":objective_metric, "Metric Value":max_metric}, ignore_index = True)
         for i in range(len(dates)):
-            model_performance_metrics = model_performance_metrics.append({"Training_Date":dates[i], "Dataset":data_sets[i], "Metric":metrics[i], "Value":values[i], "Increase_from_Previous":increase_decrease[i]}, ignore_index = True)
+            model_performance_metrics = model_performance_metrics.append({"Performance_Training_Date":dates[i], "Dataset":data_sets[i], "Metric":metrics[i], "Value":values[i], "Increase_from_Previous":increase_decrease[i]}, ignore_index = True)
         
         # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
         model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)
@@ -146,19 +146,55 @@ def preprocessing_function():
             feature_importance_records = pd.read_csv(feature_importance_input_file_location.split('/')[-1])
             print(f"Contents of feature importance file are {feature_importance_records}")
         except:
-            feature_importance_records = pd.DataFrame([], columns = ["Training_Date", "Dataset", "Variable_Name", "Importance_Value"])
+            feature_importance_records = pd.DataFrame([], columns = ["Feature_Training_Date", "Dataset", "Variable_Name", "Importance_Value"])
         
         len_records = len(feature_importance_records)
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
         # feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
         for i in range(len(feature_importance_column_names)):
-            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
+            feature_importance_records=feature_importance_records.append({"Feature_Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
         
         feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
         # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
         model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)
+        
+        
+        
+        #### Writing confusion matrix
+        ## Reading new data
+        matrix = pd.read_csv("Confusion_Matrix.csv")
+        dates = matrix["Confusion_Date"].tolist()
+        data_sets = matrix["Data"].tolist()
+        tn = matrix["TN"].tolist()
+        fp = matrix["FP"].tolist()
+        fn = matrix["FN"].tolist()
+        tp = matrix["TP"].tolist()
+        
+        ## Downloading old data
+        try:
+            feature_bucket = feature_importance_input_file_location[5:].split('/')[0]
+            s3.download_file(feature_bucket, "Training_Pipeline_Output/Confusion_Matrix.csv", "Confusion_Matrix.csv")
+            old_matrix = pd.read_csv("Confusion_Matrix.csv")
+        except:
+            old_matrix = pd.DataFrame([], columns = ["Confusion_Date", "Data", "TN", "FP", "FN", "TP"])
+        
+        ## Appending new data to old data
+        for i in range(len(dates)):
+            old_matrix = old_matrix.append({"Confusion_Date":dates[i], "Data":data_sets[i], "TN":tn[i], "FP":fp[i], "FN":fn[i], "TP":tp[i]})
+            
+        ## Writing appended data
+        old_matrix.to_csv(f"/opt/ml/processing/confusion_matrix/Confusion_Matrix.csv", index = False)
+        
+        
+        
+        
+        #### Combining all dashboard data in one file
+        df_concat = pd.concat([feature_importance_records, model_performance_metrics, old_matrix], axis=1)
+        ## Writing appended data
+        df_concat.to_csv(f"/opt/ml/processing/Combined/Combined_Data.csv", index = False)
+        
         
         
         report_dict = {"best_model_name":best_model_name}
