@@ -156,7 +156,7 @@ def preprocessing_function():
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
         # feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
         for i in range(len(feature_importance_column_names)):
-            feature_importance_records=feature_importance_records.append({"Feature_Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
+            feature_importance_records=feature_importance_records.append({"Feature_Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]}, ignore_index = True)
         
         feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
@@ -185,7 +185,7 @@ def preprocessing_function():
         
         ## Appending new data to old data
         for i in range(len(dates)):
-            old_matrix = old_matrix.append({"Confusion_Date":dates[i], "Data":data_sets[i], "TN":tn[i], "FP":fp[i], "FN":fn[i], "TP":tp[i]})
+            old_matrix = old_matrix.append({"Confusion_Date":dates[i], "Data":data_sets[i], "TN":tn[i], "FP":fp[i], "FN":fn[i], "TP":tp[i]}, ignore_index = True)
             
         ## Writing appended data
         old_matrix.to_csv(f"/opt/ml/processing/confusion_matrix/Confusion_Matrix.csv", index = False)
