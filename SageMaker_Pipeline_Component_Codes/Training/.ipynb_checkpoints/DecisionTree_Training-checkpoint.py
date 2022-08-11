@@ -100,6 +100,7 @@ def dt_training_function():
         feat_importance_record = pandas.DataFrame([feat_importance], columns = X_train.columns.tolist())
         feat_importance_record.to_csv(f"{args.output_data_dir}/Feature_Importance.csv", index = False)
         
+        
 
         objective_metric = args.objective_metric
         if objective_metric == "anything":
@@ -118,6 +119,20 @@ def dt_training_function():
             out.write(str(metric_value))
         print(f"{objective_metric}:{metric_value}")
         logger.info(f"{objective_metric} calculated.")
+        
+        
+        
+        ## Writing varius model performance metrics
+        from datetime import date
+        today = date.today()
+        metrices = ["F1","Recall","Accuracy","Precision"]
+        train_prediction = mod_dt.predict(X_train)
+        metrics = pandas.DataFrame([], columns = ["Training_Date","Dataset","Metric", "Value"])
+        metrics["Training_Date"] = [today] * len(metrices) * 2
+        metrics["Dataset"] = ["Train"] * len(metrices) + ["Test"] * len(metrices)
+        metrics["Metric"] = metrices * 2
+        metrics["Value"] = [f1_score(y_train, train_prediction), recall_score(y_train, train_prediction), accuracy_score(y_train, train_prediction), precision_score(y_train, train_prediction)] + [f1_score(y_test, prediction), recall_score(y_test, prediction), accuracy_score(y_test, prediction), precision_score(y_test, prediction)]
+        metrics.to_csv(f"{args.output_data_dir}/Metrics.csv", index = False)
 
 
 
