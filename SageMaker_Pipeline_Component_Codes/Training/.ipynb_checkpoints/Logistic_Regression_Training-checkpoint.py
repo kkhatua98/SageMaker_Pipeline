@@ -144,7 +144,7 @@ def lr_training_function():
         from datetime import date
         today = date.today()
         metrices = ["F1","Recall","Accuracy","Precision"]
-        train_prediction = mod_dt.predict(X_train)
+        train_prediction = mod_lr.predict(X_train)
         metrics = pandas.DataFrame([], columns = ["Training_Date","Dataset","Metric", "Value"])
         metrics["Training_Date"] = [today] * len(metrices) * 2
         metrics["Dataset"] = ["Train"] * len(metrices) + ["Test"] * len(metrices)
