@@ -140,7 +140,7 @@ def dt_training_function():
         from sklearn.metrics import confusion_matrix
         tn, fp, fn, tp = confusion_matrix(y_train, train_prediction).ravel()
         train_row = [tn, fp, fn, tp]
-        tn, fp, fn, tp = confusion_matrix(y_test, test_prediction).ravel()
+        tn, fp, fn, tp = confusion_matrix(y_test, prediction).ravel()
         test_row = [tn, fp, fn, tp]
         matrix = pandas.DataFrame([[today, "Train"] + train_row, [today, "Test"] + test_row], columns = ["Confusion_Date", "Data", "TN", "FP", "FN", "TP"])
         matrix.to_csv(f"{args.output_data_dir}/Confusion_Matrix.csv", index = False)
