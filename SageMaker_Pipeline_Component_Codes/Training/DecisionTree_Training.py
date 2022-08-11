@@ -133,6 +133,17 @@ def dt_training_function():
         metrics["Metric"] = metrices * 2
         metrics["Value"] = [f1_score(y_train, train_prediction), recall_score(y_train, train_prediction), accuracy_score(y_train, train_prediction), precision_score(y_train, train_prediction)] + [f1_score(y_test, prediction), recall_score(y_test, prediction), accuracy_score(y_test, prediction), precision_score(y_test, prediction)]
         metrics.to_csv(f"{args.output_data_dir}/Metrics.csv", index = False)
+        
+        
+        
+        ## Confusion matrix
+        from sklearn.metrics import confusion_matrix
+        tn, fp, fn, tp = confusion_matrix(y_train, train_prediction).ravel()
+        train_row = [tn, fp, fn, tp]
+        tn, fp, fn, tp = confusion_matrix(y_test, test_prediction).ravel()
+        test_row = [tn, fp, fn, tp]
+        matrix = pandas.DataFrame([[today, "Train"] + train_row, [today, "Test"] + test_row], columns = ["Confusion_Date", "Data", "TN", "FP", "FN", "TP"])
+        matrix.to_csv(f"{args.output_data_dir}/Confusion_Matrix.csv", index = False)
 
 
 

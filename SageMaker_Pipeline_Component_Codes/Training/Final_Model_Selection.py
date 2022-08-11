@@ -153,12 +153,40 @@ def preprocessing_function():
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
         # feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
         for i in range(len(feature_importance_column_names)):
-            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":Training, "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
+            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
         
         feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
         # model_performance_metrics.to_csv("s3://churn-output-bucket/Training_Pipeline_Output/Model_Performance_Metrics.csv")
         model_performance_metrics.to_csv(f"{model_metric_output_location}/Model_Performance_Metrics.csv", index = False)
+        
+        
+        
+        #### Writing confusion matrix
+        ## Reading new data
+        matrix = pd.read_csv("Confusion_Matrix.csv")
+        dates = matrix["Confusion_Date"].tolist()
+        data_sets = matrix["Data"].tolist()
+        tn = matrix["TN"].tolist()
+        fp = matrix["FP"].tolist()
+        fn = matrix["FN"].tolist()
+        tp = matrix["TP"].tolist()
+        
+        ## Downloading old data
+        try:
+            feature_bucket = feature_importance_input_file_location[5:].split('/')[0]
+            s3.download_file(feature_bucket, "Training_Pipeline_Output/Confusion_Matrix.csv", "Confusion_Matrix.csv")
+            old_matrix = pd.read_csv("Confusion_Matrix.csv")
+        except:
+            old_matrix = pd.DataFrame([], columns = ["Confusion_Date", "Data", "TN", "FP", "FN", "TP"])
+        
+        ## Appending new data to old data
+        for i in range(len(dates)):
+            old_matrix = old_matrix.append({"Confusion_Date":dates[i], "Data":data_sets[i], "TN":tn[i], "FP":fp[i], "FN":fn[i], "TP":tp[i]})
+            
+        ## Writing appended data
+        old_matrix.to_csv(f"/opt/ml/processing/confusion_matrix/Confusion_Matrix.csv", index = False)
+        
         
         
         report_dict = {"best_model_name":best_model_name}

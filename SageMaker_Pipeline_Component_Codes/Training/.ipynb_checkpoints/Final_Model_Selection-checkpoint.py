@@ -153,7 +153,7 @@ def preprocessing_function():
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
         # feature_importance_records = feature_importance_records.append({column:value for column, value in zip(feature_importance_column_names, feature_importance_values)}, ignore_index = True)
         for i in range(len(feature_importance_column_names)):
-            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":Training, "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
+            feature_importance_records=feature_importance_records.append({"Training_Date":today, "Dataset":"Training", "Variable_Name":feature_importance_column_names[i], "Importance_Value":feature_importance_values[i]})
         
         feature_importance_records.to_csv(f"{feature_importance_output_file_location}/Feature_Importance.csv", index = False)
         
