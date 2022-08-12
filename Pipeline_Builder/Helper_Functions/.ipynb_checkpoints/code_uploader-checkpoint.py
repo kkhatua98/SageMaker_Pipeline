@@ -90,7 +90,7 @@ if monitoring_lambda_function_name not in functions:
         },
         Description='Update churn scoring endpoint',
         FunctionName="model_performance_notification",
-        Handler='update_endpoint.handler_name',
+        Handler="monitoring.lambda_handler",
         Publish=True,
         # Role='arn:aws:iam::123456789012:role/lambda-role',
         Role="arn:aws:iam::852619674999:role/role_given_to_lambda",
