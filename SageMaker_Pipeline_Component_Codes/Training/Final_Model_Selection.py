@@ -131,7 +131,7 @@ def preprocessing_function():
             last_training_date = model_performance_metrics.iloc[-1,0]
             subset = model_performance_metrics.loc[model_performance_metrics["Performance_Training_Date"] == last_training_date, :]
             old_values = subset["Value"].tolist()
-            increase_decrease = [(values[i] - old_values[i])/old_values for i in range(len(values))]
+            increase_decrease = [(values[i] - old_values[i])/old_values[i] for i in range(len(values))]
         today = date.today()
         # model_performance_metrics.iloc[len_metrics, :] = [today, "accuracy", max_metric]
 #         model_performance_metrics = model_performance_metrics.append({"Date":today, "Metric":objective_metric, "Metric Value":max_metric}, ignore_index = True)
