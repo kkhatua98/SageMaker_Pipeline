@@ -198,7 +198,7 @@ def preprocessing_function():
         #### Combining all dashboard data in one file
         df_concat = pd.concat([feature_importance_records, model_performance_metrics, old_matrix], axis=1)
         ## Writing appended data
-#         df_concat.to_csv(f"/opt/ml/processing/Combined/Combined_Data.csv", index = False)
+        df_concat.to_csv(f"/opt/ml/processing/Combined/Combined_Data.csv", index = False)
         
         
         
