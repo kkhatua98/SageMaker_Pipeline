@@ -103,7 +103,6 @@ else:
         S3Bucket=build_parameters["input_bucket"],
         S3Key='codes/Lambda/monitoring_lambda_codes.zip'
     )
-    client.update_function_configuration(Handler="monitoring.lambda_handler")
     print(response)
 
 
