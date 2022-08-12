@@ -59,7 +59,7 @@ if lambda_function_name not in functions:
         },
         Description='Update churn scoring endpoint',
         FunctionName=build_parameters["lambda_function_name"],
-        Handler='monitoring.lambda_handler',
+        Handler='update_endpoint.handler_name',
         Publish=True,
         # Role='arn:aws:iam::123456789012:role/lambda-role',
         Role="arn:aws:iam::852619674999:role/role_given_to_lambda",
