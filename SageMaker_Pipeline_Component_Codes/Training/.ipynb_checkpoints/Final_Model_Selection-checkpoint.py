@@ -118,6 +118,7 @@ def preprocessing_function():
             # metric_folder_contents = os.listdir(model_metric_input_location)
             # model_performance_metrics = pd.read_csv(f"{model_metric_input_location}/{metric_folder_contents[0]}")
             metric_bucket = model_metric_input_location[5:].split('/')[0]
+            print(f"Model metric location: {model_metric_input_location}")
             s3.download_file(metric_bucket, model_metric_input_location[len(metric_bucket)+6:], model_metric_input_location.split('/')[-1])
             model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
@@ -178,6 +179,7 @@ def preprocessing_function():
         ## Downloading old data
         try:
             feature_bucket = feature_importance_input_file_location[5:].split('/')[0]
+            print(f"Confusion Matrid location: {feature_importance_input_file_location}")
             s3.download_file(feature_bucket, "Training_Pipeline_Output/Confusion_Matrix.csv", "Confusion_Matrix.csv")
             old_matrix = pd.read_csv("Confusion_Matrix.csv")
         except:
@@ -196,7 +198,7 @@ def preprocessing_function():
         #### Combining all dashboard data in one file
         df_concat = pd.concat([feature_importance_records, model_performance_metrics, old_matrix], axis=1)
         ## Writing appended data
-        df_concat.to_csv(f"/opt/ml/processing/Combined/Combined_Data.csv", index = False)
+#         df_concat.to_csv(f"/opt/ml/processing/Combined/Combined_Data.csv", index = False)
         
         
         
