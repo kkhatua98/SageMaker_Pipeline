@@ -123,6 +123,8 @@ def preprocessing_function():
             model_performance_metrics = pd.read_csv(model_metric_input_location.split('/')[-1])
             print(f"Model performance metric is {model_performance_metrics}")
         except:
+            var = traceback.format_exc()
+            print("The reason why model performance append failing is: {var}")
             model_performance_metrics = pd.DataFrame([], columns = ["Performance_Training_Date","Dataset","Metric", "Value"])
         
         len_metrics = len(model_performance_metrics)
