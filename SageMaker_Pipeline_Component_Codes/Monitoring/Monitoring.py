@@ -47,7 +47,7 @@ def monitoring_function():
     metrics_df.to_csv(f"{args.metrics_output_location}/Monitor.csv", index = False)
     
     import json
-    mail_content = json.dumps({"tn":tn, "fp":fp, "fn":fn, "tp":tp, "accuracy":accuracy, "precision":precision, "recall":recall, "specificity":specificity, "f1":f1})
+    mail_content = json.dumps({"tn":str(tn), "fp":str(fp), "fn":str(fn), "tp":str(tp), "accuracy":str(accuracy), "precision":str(precision), "recall":str(recall), "specificity":str(specificity), "f1":str(f1)})
     
     
     import datetime
