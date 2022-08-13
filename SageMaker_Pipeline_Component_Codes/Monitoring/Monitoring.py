@@ -46,6 +46,19 @@ def monitoring_function():
         
     metrics_df.to_csv(f"{args.metrics_output_location}/Monitor.csv", index = False)
     
+    
+    mail_content = {"tn":tn, "fp":fp, "fn":fn, "tp":tp, "accuracy":accuracy, "precision":precision, "recall":recall, "specificity":specificity, "f1":f1}
+    
+    
+    import datetime
+    snsClient = boto3.client("sns")
+    response = snsClient.publish(
+        TopicArn = "arn:aws:sns:ap-south-1:852619674999:Approvals", 
+        # Message = json.dumps(message_sns),
+        Message = mail_content,
+        Subject = f"Model Performance Metrics for {str(datetime.datetime.today()).split(' ')[0]}"
+    )
+    
     return tn, fp, fn, tp,accuracy,precision,recall,specificity,f1
     # , roc_auc
 
