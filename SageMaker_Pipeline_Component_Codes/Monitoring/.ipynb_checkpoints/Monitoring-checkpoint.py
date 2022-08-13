@@ -46,13 +46,13 @@ def monitoring_function():
         
     metrics_df.to_csv(f"{args.metrics_output_location}/Monitor.csv", index = False)
     
-    
-    mail_content = {"tn":tn, "fp":fp, "fn":fn, "tp":tp, "accuracy":accuracy, "precision":precision, "recall":recall, "specificity":specificity, "f1":f1}
+    import json
+    mail_content = json.dumps({"tn":tn, "fp":fp, "fn":fn, "tp":tp, "accuracy":accuracy, "precision":precision, "recall":recall, "specificity":specificity, "f1":f1})
     
     
     import datetime
     import boto3
-    snsClient = boto3.client("sns", region = "ap-south-1")
+    snsClient = boto3.client("sns", region_name = "ap-south-1")
     response = snsClient.publish(
         TopicArn = "arn:aws:sns:ap-south-1:852619674999:Approvals", 
         # Message = json.dumps(message_sns),
