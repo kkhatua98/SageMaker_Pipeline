@@ -52,7 +52,7 @@ def monitoring_function():
     
     import datetime
     import boto3
-    snsClient = boto3.client("sns")
+    snsClient = boto3.client("sns", region = "ap-south-1")
     response = snsClient.publish(
         TopicArn = "arn:aws:sns:ap-south-1:852619674999:Approvals", 
         # Message = json.dumps(message_sns),
