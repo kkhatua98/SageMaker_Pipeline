@@ -60,6 +60,14 @@ def monitoring_function():
         Subject = f"Model Performance Metrics for {str(datetime.datetime.today()).split(' ')[0]}"
     )
     
+    
+    if accuracy < 100:
+        sagemakerClient = boto3.client('sagemaker')
+        response = sagemakerClient.start_pipeline_execution(
+            PipelineName='churn-training',
+            PipelineExecutionDisplayName=f'Demo{datetime.datetime.now()}'
+        )
+    
     return tn, fp, fn, tp,accuracy,precision,recall,specificity,f1
     # , roc_auc
 
