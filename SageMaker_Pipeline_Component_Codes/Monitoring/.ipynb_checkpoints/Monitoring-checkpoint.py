@@ -62,7 +62,7 @@ def monitoring_function():
     
     
     if accuracy < 100:
-        sagemakerClient = boto3.client('sagemaker')
+        sagemakerClient = boto3.client('sagemaker', region_name = "ap-south-1")
         response = sagemakerClient.start_pipeline_execution(
             PipelineName='churn-training',
             PipelineExecutionDisplayName=f'Demo{datetime.datetime.now()}'
