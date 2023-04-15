@@ -1,0 +1,27 @@
+{
+    "model_type": "sklearn_model",
+    "model_name": "decision_tree",
+    "entry_point": "main.py",
+    "dependencies": "requirements.txt",
+    "instance_type": "ml.m4.xlarge",
+    "hyperparameters": {
+        "criterion": {
+            "type": "categorical",
+            "values": [
+                "gini",
+                "entropy"
+            ]
+        },
+        "max_depth": {
+            "type": "integer",
+            "min_value": 2,
+            "max_value": 12
+        },
+        "min_samples_leaf": {
+            "type": "integer",
+            "min_value": 1,
+            "max_value": 5
+        }
+    },
+    "tuning_strategy": "Random"
+}

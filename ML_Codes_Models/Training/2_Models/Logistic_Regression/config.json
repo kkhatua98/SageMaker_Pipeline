@@ -1,0 +1,24 @@
+{
+    "model_type":"sklearn_model",
+    "model_name":"logistic_regression",
+    "entry_point":"main.py",
+    "dependencies":"requirements.txt",
+    "instance_type": "ml.m4.xlarge",
+    "hyperparameters":{
+        "penalty":{
+            "type":"categorical",
+            "values":["l1","l2"]
+        },
+        "C":{
+            "type":"continuous",
+            "min_value":0.001,
+            "max_value":1000.0,
+            "scaling_type":"Logarithmic"
+        },
+        "solver":{
+            "type":"categorical",
+            "values":["liblinear", "newton-cg", "lbfgs", "sag", "saga"]
+        }
+    },
+    "tuning_strategy":"Random"
+}
