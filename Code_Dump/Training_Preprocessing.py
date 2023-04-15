@@ -12,55 +12,53 @@ def preprocessing_function():
     
     print(os.environ.get('SM_CHANNEL_TEST'))
 
+
+    ## Creating a logger.
+    # logger = logging.getLogger()
+    # logging.captureWarnings(True)
+    # logger.setLevel(logging.INFO)
+    # logger.addHandler(logging.StreamHandler())
+    # logger.info("Preprocessing started.")
     
 
 
     ###########################     Extracting the command line arguments     ########################
-
+    
     parser = argparse.ArgumentParser()
-    ## Adding arguments
     # Inputs
-    parser.add_argument('--full_data_location', type=str, default="/opt/ml/processing/input/data/churn-bigml-80.csv")
-    parser.add_argument('--feature_selection_file_location', type=str, default="/opt/ml/processing/input/feature_selection/Feature_Selection.csv")
+    parser.add_argument('--train_data_location', type=str, default="/opt/ml/processing/input/data/churn-bigml-80.csv")
+    parser.add_argument('--feature_selection_file_location', type=str, default="/opt/ml/processing/input/feature_selection")
 
     # Outputs
+    # parser.add_argument('--preprocessed_train_data_location', type=str, default="/opt/ml/processing/train")
+    # parser.add_argument('--preprocessed_test_data_location', type=str, default="/opt/ml/processing/test")
+    # parser.add_argument('--log_location', type=str, default="/opt/ml/processing/logss")
     parser.add_argument('--output_location', type=str, default="/opt/ml/processing/logss")
 
     # Others
     parser.add_argument('--target_column', type=str, default="Churn")
     parser.add_argument('--stop_split', type=str, default="")
     
-
-    ## Parsing    
+        
     args, _ = parser.parse_known_args()
-    # Inputs
-    full_data_location = args.full_data_location
+    train_data_location = args.train_data_location
     feature_selection_file_location = args.feature_selection_file_location
 
-    # Outputs
+    # preprocessed_train_data_location = args.preprocessed_train_data_location
+    # preprocessed_test_data_location = args.preprocessed_test_data_location
+    # log_location = args.log_location
     output_location = args.output_location
 
-    # Others
     target = args.target_column
     stop_split = args.stop_split
-
-    ###########################     Extracting the command line arguments : End     ########################
     
-
-
-
-
-    ###########################     Creating the log extractor     ########################
-
     logging.captureWarnings(True)
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler(f'{output_location}/logfile.log')
+    handler = logging.FileHandler(f'{log_location}/logfile.log')
     logger.addHandler(handler)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
-
-    ###########################     Creating the log extractor : End     ########################
     
     
         
@@ -69,10 +67,20 @@ def preprocessing_function():
 
     try:
         
-        ## Reading datasets
-        whole_data = pd.read_csv(full_data_location)
-        feature_selection = pd.read_csv(feature_selection_file_location)
+        
+        
+        ## Reading and cleaning data.
+        # base_dir = "/opt/ml/processing"
+        # # base_dir_contents = os.listdir(f"{base_dir}/input/data")
+        # base_dir_contents = os.listdir(train_data_location)
+        # for content in base_dir_contents:
+        #     if ".csv" in content:
+        #         input_data_file = content
+        # print(f"Files or folders present in the folder is {input_data_file}")
+        # print(input_data_file)
+        # whole_data = pd.read_csv(f"{train_data_location}/{input_data_file}")
 
+        whole_data = pd.read_csv(train_data_location)
 
 
         whole_data = whole_data.dropna()
@@ -188,7 +196,15 @@ def preprocessing_function():
         # target = ['Churn']
         
         
-        
+        # feature_dir_contents = os.listdir(f"/opt/ml/processing/input/feature_selection")
+        feature_dir_contents = os.listdir(feature_selection_file_location)
+        for content in feature_dir_contents:
+            if ".csv" in content:
+                input_feature_file = content
+        print(f"Files or folders present in the folder is {input_feature_file}")
+        print(input_feature_file)
+        feature_selection = pd.read_csv(f"{feature_selection_file_location}/{input_feature_file}")
+        # feature_selection = pd.read_csv("/opt/ml/processing/input/feature_selection/Feature_Selection.csv")
         feature_selection = feature_selection.fillna('N')
         rejected_columns = feature_selection.loc[feature_selection["Selection"] == 'N', 'Column'].tolist()
 
@@ -211,7 +227,7 @@ def preprocessing_function():
         whole_data = pd.get_dummies(whole_data, columns = categorical_feats, drop_first = True)
         
         if stop_split:
-            whole_data.to_csv(f"{output_location}/evaluation.csv", index=False)
+            whole_data.to_csv(f"{base_dir}/train/evaluation.csv", index=False)
             
             logger.info("Data written to disk inside container.")
             logger.info("Preprocessing completed.")
@@ -224,8 +240,8 @@ def preprocessing_function():
 
 
         ## Writing the splitted data into specific location.
-        pd.DataFrame(train).to_csv(f"{output_location}/train.csv", index=False)
-        pd.DataFrame(test).to_csv(f"{output_location}/test.csv", index=False)
+        pd.DataFrame(train).to_csv(f"{preprocessed_train_data_location}/train.csv", index=False)
+        pd.DataFrame(test).to_csv(f"{preprocessed_test_data_location}/test.csv", index=False)
         # pd.DataFrame(validation).to_csv(f"{base_dir}/validation/validation.csv", index=False)
         logger.info("Data written to disk inside container.")
 
