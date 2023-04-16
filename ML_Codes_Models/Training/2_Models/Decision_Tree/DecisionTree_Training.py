@@ -16,53 +16,56 @@ def dt_training_function():
     from sklearn.tree import DecisionTreeClassifier
       
 
+    ###########################     Extracting the command line arguments     ########################
 
-    ## Creating a logger.
-    # logger = logging.getLogger()
-    # logging.captureWarnings(True)
-    # logger.setLevel(logging.INFO)
-    # logger.addHandler(logging.StreamHandler())
-    # logger.info("Training started.")
+    ## Getting the Data, model, and output directories from the parent hyperparameter tuning job.
+    ## If not given it takes a default value.
+
+    parser = argparse.ArgumentParser()
+
+    # Input
+    parser.add_argument('--train', type=str, default=os.environ.get('SM_CHANNEL_TRAIN'))
+    parser.add_argument('--test', type=str, default=os.environ.get('SM_CHANNEL_TEST'))
+
+    # Output
+    parser.add_argument('--output_data_dir', type=str, default=os.environ.get('SM_OUTPUT_DATA_DIR'))
+    parser.add_argument('--model_dir', type=str, default=os.environ.get('SM_MODEL_DIR'))
+
+    # Hyperparameters
+    ## Hyperparameters sent by the client are passed as command-line arguments to the script.
+    parser.add_argument('--criterion', type=str, default="gini")
+    parser.add_argument('--max_depth', type=int, default=4)
+    parser.add_argument('--min_samples_leaf', type=int, default=4)
+    parser.add_argument('--objective_metric', type=str, default="accuracy")
+
+    args, _ = parser.parse_known_args()
+
+    ###########################     Extracting the command line arguments : End     ########################
     
     
+
+
+    ###########################     Creating the log extractor     ########################
+
     logging.captureWarnings(True)
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
-    handler = logging.FileHandler('/opt/ml/output/data/logfile.log')
+    handler = logging.FileHandler(f'{args.output_data_dir}/DT_logfile.log')
     # handler = logging.FileHandler('logfile.log')
     logger.addHandler(handler)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)  
+
+    ###########################     Creating the log extractor : End     ########################
     
 
 
 
     try:
-        ## Hyperparameters sent by the client are passed as command-line arguments to the script.
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--criterion', type=str, default="gini")
-        parser.add_argument('--max_depth', type=int, default=4)
-        parser.add_argument('--min_samples_leaf', type=int, default=4)
-        parser.add_argument('--objective_metric', type=str, default="accuracy")
-
-
-
-        ## Getting the Data, model, and output directories from the parent hyperparameter tuning job.
-        ## If not given it takes a default value.
-        parser.add_argument('--output_data_dir', type=str, default=os.environ.get('SM_OUTPUT_DATA_DIR'))
-        parser.add_argument('--model_dir', type=str, default=os.environ.get('SM_MODEL_DIR'))
-        parser.add_argument('--train', type=str, default=os.environ.get('SM_CHANNEL_TRAIN'))
-        parser.add_argument('--test', type=str, default=os.environ.get('SM_CHANNEL_TEST'))
-
-
-        args, _ = parser.parse_known_args()
-        logger.info("Arguments Parsed")
-
-
 
         # Loading train and test data from args.train and args.test.
-        train_data = pandas.read_csv(f"{args.train}/train.csv")
-        test_data = pandas.read_csv(f"{args.test}/test.csv")
+        train_data = pandas.read_csv(args.train)
+        test_data = pandas.read_csv(args.test)
         # print(train_data.columns)
 
 
