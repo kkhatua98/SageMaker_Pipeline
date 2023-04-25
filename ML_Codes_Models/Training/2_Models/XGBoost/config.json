@@ -1,0 +1,28 @@
+{
+    "model_type":"xgboost_model",
+    "model_name":"xgboost",
+    "entry_point":"Main.py",
+    "dependencies":"requirements.txt",
+    "instance_type": "ml.m4.xlarge",
+    "hyperparameters":{
+        "n_estimators":{
+            "type":"Discreet",
+            "min_value":2,
+            "max_value":10,
+            "difference":1
+        },
+        "max_depth":{
+            "type":"Discreet",
+            "min_value":2,
+            "max_value":10,
+            "difference":1
+        },
+        "learning_rate":{
+            "type":"Discreet",
+            "min_value":1,
+            "max_value":10,
+            "difference":1
+        }
+    },
+    "tuning_strategy":"Random"
+}
