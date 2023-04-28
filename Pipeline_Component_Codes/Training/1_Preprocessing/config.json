@@ -1,0 +1,6 @@
+{
+    "processing_type":"sklearn_processing",
+    "entry_point":"Main.py",
+    "dependencies":"requirements.txt",
+    "machine_type": "ml.m4.xlarge"
+}
